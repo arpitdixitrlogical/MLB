@@ -1,0 +1,10 @@
+﻿1>------ Build started: Project: MLB_API, Configuration: Debug Any CPU ------
+1>C:\inetpub\wwwroot\Scraper\MLBScraper.cs(34,30,34,32): warning CS0168: The variable 'ex' is declared but never used
+1>C:\inetpub\wwwroot\Scraper\MLBScraper.cs(63,41,63,43): warning CS0168: The variable 'ex' is declared but never used
+1>C:\inetpub\wwwroot\Controllers\ValuesController.cs(69,13,69,19): warning CS0162: Unreachable code detected
+1>C:\inetpub\wwwroot\Controllers\ValuesController.cs(64,30,64,32): warning CS0168: The variable 'ex' is declared but never used
+1>C:\inetpub\wwwroot\Scraper\MLBScraper.cs(110,24,110,29): warning CS0219: The variable 'PROXY' is assigned but its value is never used
+1>C:\inetpub\wwwroot\Scraper\MLBScraper.cs(269,30,269,32): warning CS0168: The variable 'ex' is declared but never used
+1>C:\inetpub\wwwroot\Scraper\MLBScraper.cs(372,30,372,32): warning CS0168: The variable 'ex' is declared but never used
+1>  MLB_API -> C:\inetpub\wwwroot\bin\MLB_API.dll
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========

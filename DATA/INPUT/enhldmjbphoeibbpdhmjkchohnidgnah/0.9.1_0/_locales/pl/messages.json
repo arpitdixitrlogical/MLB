@@ -1,0 +1,98 @@
+{
+   "add_credential": {
+      "message": "Dodaj"
+   },
+   "clear_button": {
+      "message": "Wyczyść wszystkie dane logowania"
+   },
+   "clear_credential": {
+      "message": "Wyczyść"
+   },
+   "clear_credentials_modal_text": {
+      "message": "Czy na pewno chcesz usunąć wszystkie zapisane dane?"
+   },
+   "clear_credentials_modal_title": {
+      "message": "Wyczyść wszystkie dane logowania"
+   },
+   "clear_section": {
+      "message": "Wyczyść wszystkie dane logowania"
+   },
+   "credentials_section": {
+      "message": "Dane logowania"
+   },
+   "donate": {
+      "message": "Lubisz te rozszerzenie? Byłoby fajnie gdybyś zostawił jakąś małą dotację:"
+   },
+   "edit_credential": {
+      "message": "Edytuj"
+   },
+   "export_button": {
+      "message": "Pobierz dane logowania w formacie JSON."
+   },
+   "export_section": {
+      "message": "Eksportuj"
+   },
+   "extDescription": {
+      "message": "Automatyczne logowanie z wykorzystaniem Basic Authentication na adresy URL stron podanych w wyrażeniu regularnym."
+   },
+   "extName": {
+      "message": "MultiPass dla uwierzytelniania HTTP basic authentication"
+   },
+   "import_description": {
+      "message": "Możesz importować dane logowania do tego dodatku. Użyj poniższego formatu pliku:"
+   },
+   "import_file": {
+      "message": "Pliki do importu"
+   },
+   "import_json": {
+      "message": "Dane w formacie JSON do importu"
+   },
+   "import_nothing": {
+      "message": "-nic-"
+   },
+   "import_section": {
+      "message": "Importuj"
+   },
+   "import_submit": {
+      "message": "Importuj"
+   },
+   "import_what": {
+      "message": "Co zostanie zaimportowane?"
+   },
+   "modal_cancel": {
+      "message": "Anuluj"
+   },
+   "modal_yes": {
+      "message": "Tak"
+   },
+   "open_option_page": {
+      "message": "Otwórz stronę z ustawieniami."
+   },
+   "password": {
+      "message": "Hasło"
+   },
+   "priority": {
+      "message": "Priorytet"
+   },
+   "remove_credential": {
+      "message": "Usuń"
+   },
+   "show_hide_password": {
+      "message": "Pokaż / Ukryj"
+   },
+   "test_section": {
+      "message": "Sprawdź poprawność wyrażenia regularnego"
+   },
+   "tested_regex_label": {
+      "message": "Twoje wyrażenie regularne:"
+   },
+   "tested_urls": {
+      "message": "Adresy URL do sprawdzenia:"
+   },
+   "url_regexp": {
+      "message": "Adres URL (wyrażenie regularne)"
+   },
+   "username": {
+      "message": "Nazwa użytkownika"
+   }
+}

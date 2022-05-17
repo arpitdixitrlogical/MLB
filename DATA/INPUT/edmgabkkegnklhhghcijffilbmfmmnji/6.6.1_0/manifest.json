@@ -1,0 +1,39 @@
+{
+   "background": {
+      "page": "background.html",
+      "persistent": true
+   },
+   "browser_action": {
+      "default_icon": "images/main-off-18.png",
+      "default_popup": "popup/popup.html",
+      "default_title": "GeoSurf"
+   },
+   "content_scripts": [ {
+      "all_frames": false,
+      "js": [ "js/libs/jquery-3.2.1.min.js", "js/content/content.js", "js/content/sso.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_end"
+   }, {
+      "all_frames": true,
+      "js": [ "js/content/getLocation.js" ],
+      "matches": [ "\u003Call_urls>" ],
+      "run_at": "document_start"
+   } ],
+   "content_security_policy": "script-src 'self'; object-src 'self';",
+   "description": "",
+   "homepage_url": "http://www.geosurf.com",
+   "icons": {
+      "128": "icons/128.png",
+      "16": "icons/16.png",
+      "18": "icons/18.png",
+      "32": "icons/32.png",
+      "48": "icons/48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2IUxUqcIdTbtSaOGQ6zX1tkaafs9/godmY7nJWo5pV2XnspbA/l+VNVq9j4Q5bz7grsoicQZ9iEgPm7NwPxUlr/3V0S6j0gGAHERY2KrLZ/n2hF8TOZWpUt5ohtXzwLzDHNhqzTvhswTpCwV9/58GgPiPPNdip1urIgtwQO0BspMdBV3JTfRN5Cj70hAfcCjO2Yk2ZsGJUI5JQlxz5eI5hx5Bhnd9zDwS2SochVz7KwFUh9pB6bwUzGYFSaitdfk5g232AnSuyIlMx2bdKcIDKm4k+635NbxaDHFu2wkn+3Kje1dVakLpY90Y27SeMdZVB3lJQymjAKZGsw4cUAmPQIDAQAB",
+   "manifest_version": 2,
+   "name": "Geosurf Pro",
+   "permissions": [ "\u003Call_urls>", "proxy", "browsingData", "webRequest", "webRequestBlocking", "cookies", "storage", "https://api.geosurf.io/*", "https://api-toolbar.geosurf.io/*", "https://toolbar.geosurf.com/*" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "6.6.1",
+   "web_accessible_resources": [ "images/cookies_ok.png", "flags/*" ]
+}

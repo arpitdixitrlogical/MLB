@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>Screen Capture</title>
+<meta charset="UTF-8">
+<script src="../js/editor.js"></script>
+</head>
+<body>
+	<embed id="pluginobj" width="0" height="0" type="application/x-screencapture" />
+	<div id="header">
+		<form style="background: url('../images/screenBack.png') no-repeat  top center;  width: 450px; height: 700px; position:fixed; left: 35%; top: 15%; display: none;" id="screen_send" method="post" enctype="multipart/form-data" action='http://toolbar.geosurf.com/toolbar/send_screen.php' >
+		</form>
+
+		<div id="screenSent" style="background: url('../images/screenSent.png') no-repeat top left;   position: fixed;  left: 40%; top: 40%; height: 180px; width: 300px; z-index:999999; display: none;">
+			<img id="screenX" src="../images/xButton.png" alt="" style="float: right; padding: 10px 5px 0px 0px; margin: 0; cursor: pointer;" />
+		</div>
+
+		<div class="toolbar" id="okBtn" style="background: url('../images/screenHeadLong.png') no-repeat  top left;  position:fixed; right:5px; top: -3px; height: 880px; width: 272px; border:1px solid grey;  border-bottom-right-radius: 3px;  border-bottom-left-radius: 3px;">
+			<canvas id="smallimg" style="padding: 165px 10px; " ></canvas>
+			<ul style="position:fixed; right:60px; top: 2px; margin: 12px 0;">
+				<li id="btnSave" style="list-style: none" >
+					<input type="button" id="saveButton" style="background: url('../images/buttonBlue.png') no-repeat top left; width: 71px; height: 26px; border-radius: 6px; border: 0px; cursor:pointer; color: white" value="Save"  />
+					<span id="tSave"></span>
+					<div id="loading" style="display: none; background: url('data:image/gif;base64,R0lGODlhEAALAPQAAABx/x+39QR5/AV9/AJ2/R609R+39Rmp9g+S+ROb+AiC+xqt9hWh9w6Q+RKa+AeC+xqr9h619RWg9wJ3/QR7/AFz/Rim9gR5/AFz/QiD+wuK+gZ+/AF0/QAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCwAAACwAAAAAEAALAAAFLSAgjmRpnqSgCuLKAq5AEIM4zDVw03ve27ifDgfkEYe04kDIDC5zrtYKRa2WQgAh+QQJCwAAACwAAAAAEAALAAAFJGBhGAVgnqhpHIeRvsDawqns0qeN5+y967tYLyicBYE7EYkYAgAh+QQJCwAAACwAAAAAEAALAAAFNiAgjothLOOIJAkiGgxjpGKiKMkbz7SN6zIawJcDwIK9W/HISxGBzdHTuBNOmcJVCyoUlk7CEAAh+QQJCwAAACwAAAAAEAALAAAFNSAgjqQIRRFUAo3jNGIkSdHqPI8Tz3V55zuaDacDyIQ+YrBH+hWPzJFzOQQaeavWi7oqnVIhACH5BAkLAAAALAAAAAAQAAsAAAUyICCOZGme1rJY5kRRk7hI0mJSVUXJtF3iOl7tltsBZsNfUegjAY3I5sgFY55KqdX1GgIAIfkECQsAAAAsAAAAABAACwAABTcgII5kaZ4kcV2EqLJipmnZhWGXaOOitm2aXQ4g7P2Ct2ER4AMul00kj5g0Al8tADY2y6C+4FIIACH5BAkLAAAALAAAAAAQAAsAAAUvICCOZGme5ERRk6iy7qpyHCVStA3gNa/7txxwlwv2isSacYUc+l4tADQGQ1mvpBAAIfkECQsAAAAsAAAAABAACwAABS8gII5kaZ7kRFGTqLLuqnIcJVK0DeA1r/u3HHCXC/aKxJpxhRz6Xi0ANAZDWa+kEAA7AAAAAAAAAAAA') no-repeat top left; position: fixed; z-index: 999999; right: 15px; top: 22px; width: 36px; height: 36px;"></div>
+				</li>
+				<li id="btnUpload" style="display: none">
+					<span id="tUpload"></span>
+				</li>
+			</ul>
+			<input type="button" id="btnSend" style="background: url('../images/buttonBlue.png') no-repeat  top left; width: 71px; height: 26px; position:fixed; right:140px; top: 14px; border-radius: 6px; border: 0; cursor: pointer; color: white" value="Send"  />
+			<div id="btnClose" style="background: url('../images/xButton.png') no-repeat center center; width: 24px; height: 23px; position: fixed; right: 10px; top: 5px; cursor: pointer;"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div id="showBox">
+		<div id="photo">
+			<canvas id="canvas"></canvas>
+			<canvas id="mask-canvas"></canvas>
+			<div class="layer" id="layer0"></div>
+		</div>
+	</div>
+
+	<div id="overlay"></div>
+
+	<script src="../js/libs/jquery-3.2.1.min.js"></script>
+	<script src="../js/libs/base64.js"></script>
+	<script src="../js/libs/canvas2image.js"></script>
+	<script src="../js/showimage.js"></script>
+</body>
+</html>
