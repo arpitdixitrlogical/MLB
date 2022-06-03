@@ -86,3 +86,16 @@ C:\inetpub\wwwroot\obj\Debug\MLB_API.csproj.CoreCompileInputs.cache
 C:\inetpub\wwwroot\obj\Debug\MLB_API.csproj.CopyComplete
 C:\inetpub\wwwroot\obj\Debug\MLB_API.dll
 C:\inetpub\wwwroot\obj\Debug\MLB_API.pdb
+C:\ashish\bin\MLB_API.dll.config
+C:\ashish\bin\MLB_API.dll
+C:\ashish\bin\MLB_API.pdb
+C:\ashish\bin\htmlagilitypack.dll
+C:\ashish\bin\Interop.WinHttp.dll
+C:\ashish\bin\Newtonsoft.Json.dll
+C:\ashish\bin\WebDriver.dll
+C:\ashish\bin\WebDriver.xml
+C:\ashish\obj\Debug\MLB_API.csproj.AssemblyReference.cache
+C:\ashish\obj\Debug\MLB_API.csproj.CoreCompileInputs.cache
+C:\ashish\obj\Debug\MLB_API.csproj.CopyComplete
+C:\ashish\obj\Debug\MLB_API.dll
+C:\ashish\obj\Debug\MLB_API.pdb

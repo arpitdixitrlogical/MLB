@@ -19,7 +19,7 @@ namespace MLB_API.Scraper
         public static IWebDriver cd = null;
         public static string directory_name = AppDomain.CurrentDomain.BaseDirectory;
         public static string Input_path = directory_name + "DATA\\INPUT\\";
-        public static string Output_path = directory_name + "DATA\\OUTPUT\\" + System.DateTime.Now.ToString("MM-dd-yyyy") ;
+        public static string Output_path = directory_name + "DATA\\OUTPUT\\" + System.DateTime.Now.ToString("MM-dd-yyyy");
         public static string Error_list = directory_name + "DATA\\OUTPUT\\" + System.DateTime.Now.ToString("MM-dd-yyyy") + "\\Error.txt";
         public static string Cookiestext = directory_name + "DATA\\OUTPUT\\" + System.DateTime.Now.ToString("MM-dd-yyyy") + "\\Cookies.txt";
         public static string[] Museragentlist = File.ReadAllLines(Input_path + "Museragent.txt");
@@ -36,7 +36,7 @@ namespace MLB_API.Scraper
         public static int useragentnum = 0;
         public static int iprand = 0;
         public static int errorpage = 0;
-
+        public static bool Isuseproxy = false;
         static void Main(string[] args)
         {
             try
@@ -47,7 +47,7 @@ namespace MLB_API.Scraper
 
             }
             catch (Exception ex)
-            {  }
+            { }
         }
 
         public string Input(string EventURL, string SeatmapId, string GetType, bool CookiesRequired)
@@ -67,7 +67,7 @@ namespace MLB_API.Scraper
             try
             {
                 //IWebDriver cd = null;
-               
+
 
                 string Cookiestextread = File.ReadAllText(Cookiestext);
                 if ((Cookiestextread != "") && (CookiesRequired == false))
@@ -103,16 +103,13 @@ namespace MLB_API.Scraper
                 }
                 else
                 {
-               
+
                     // open Seleniume data..
                     try
                     {
 
                         if (cd == null)
-                        {
                             PageSource = Seleniume();
-
-                        }
                         else
                             PageSource = cd.PageSource;
 
@@ -129,6 +126,7 @@ namespace MLB_API.Scraper
                         PageSource = Navigation(cd, "id=\"venuemap-container\"", EventURL, GetType, SeatmapId, CookiesRequired);
                         if ((PageSource == "Rescrape") || (PageSource.Contains("We found the wrong page. Please try again")))
                         {
+                            Isuseproxy = true;
                             goto rty1;
                         }
                         else
@@ -138,21 +136,19 @@ namespace MLB_API.Scraper
                     {
                         CloseBrowser(cd);
                         goto rty1;
-                        CloseBrowser(cd);
                     }
                     else
                         return "Seleniume Not working check it ?";
                 }
 
                 //if ((PageSource.Contains("OpenQA.Selenium.WebDriverException")))
-                    //goto rty1;
+                //goto rty1;
 
                 //if (((PageSource.Contains("found the wrong page")) || (PageSource.Contains("Rescrape")) || (PageSource.Contains("OpenQA.Selenium.WebDriverException"))) && (!PageSource.Contains("<?xml")) && (!PageSource.Contains("<html")))
                 //     goto rty1;
             }
             catch (Exception ex)
             {
-                //goto rty1;
                 return ex.ToString();
             }
             return PageSource;
@@ -183,8 +179,8 @@ namespace MLB_API.Scraper
                 cd = new ChromeDriver(Input_path, options);
                 //cd.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(40));
 
-
-                ProxyChnage(cd);
+                if (Isuseproxy == true)
+                    ProxyChnage(cd);
             }
             catch (Exception ex)
             {
@@ -242,35 +238,27 @@ namespace MLB_API.Scraper
         }
 
 
-        public string Navigation(IWebDriver cd, string contain,string EventURL, string GetType,string SeatmapId,bool CookiesRequired)
+        public string Navigation(IWebDriver cd, string contain, string EventURL, string GetType, string SeatmapId, bool CookiesRequired)
         {
-            Rty:
+        Rty:
             string pagesource = "";
             try
             {
                 cd.Navigate().GoToUrl(EventURL);
                 Thread.Sleep(2000);
                 if (cd.PageSource.Contains(contain))
-                {
-                    pagesource= FindCookies(cd, EventURL, GetType, SeatmapId, CookiesRequired);
-                }
+                    pagesource = FindCookies(cd, EventURL, GetType, SeatmapId, CookiesRequired);
                 else if (cd.PageSource.Contains("Set Your Search Options"))
-                {
                     pagesource = FindCookies(cd, EventURL, GetType, SeatmapId, CookiesRequired);
-                }
                 else if (cd.PageSource.Contains("id=\"event-list-filter\""))
-                {
                     pagesource = FindCookies(cd, EventURL, GetType, SeatmapId, CookiesRequired);
-                }
                 else if (cd.PageSource.Contains("An unexpected error has occurred."))
                 {
                     CloseBrowser(cd);
                     pagesource = "Rescrape";
                 }
                 else if (cd.PageSource.Contains("ng-binding\">This event is not on sale</span>"))
-                {
                     return pagesource;
-                }
                 else if (cd.PageSource.Contains("<h1>Access Denied</h1>"))
                 {
                     CloseBrowser(cd);
@@ -288,7 +276,7 @@ namespace MLB_API.Scraper
             return pagesource;
         }
 
-        public string FindCookies(IWebDriver cd, string EventURL, string GetType, string SeatmapId,bool CookiesRequired)
+        public string FindCookies(IWebDriver cd, string EventURL, string GetType, string SeatmapId, bool CookiesRequired)
         {
             string pagesource = "";
             try
@@ -300,12 +288,10 @@ namespace MLB_API.Scraper
                 string Cookie = "";
 
                 foreach (var item in asd)
-                {
                     Cookie += item.Name + "=" + item.Value + "; ";
-                }
 
                 pagesource = "";
-                pagesource = Getdata(Cookie, EventURL, GetType, SeatmapId, CookiesRequired,5);
+                pagesource = Getdata(Cookie, EventURL, GetType, SeatmapId, CookiesRequired, 5);
             }
             catch (Exception ex)
             {
@@ -314,7 +300,7 @@ namespace MLB_API.Scraper
             return pagesource;
         }
 
-        public  string Getdata(string Cookie, string EventURL, string GetType, string SeatmapId, bool checkcookies,int rtypage)
+        public string Getdata(string Cookie, string EventURL, string GetType, string SeatmapId, bool checkcookies, int rtypage)
         {
 
             int checkreq = 0;
@@ -323,7 +309,7 @@ namespace MLB_API.Scraper
             string pid = (Regex.Match(EventURL, "pid=(.*?)\\d+").Groups[0].Value).Replace("pid=", "");
             string agency = Regex.Match(EventURL, "agency=(.*?)&").Groups[1].Value;
 
-            if (!string.IsNullOrEmpty(SeatmapId.Replace("null","")))
+            if (!string.IsNullOrEmpty(SeatmapId.Replace("null", "")))
                 url = "https://mpv.tickets.com/api/pvodc/v1/events/seatmap/" + SeatmapId + "/availability/?pid=" + pid + "&agency=" + agency + "&orgId=" + orgid + "&supportsVoucherRedemption=true";
             else
                 url = "https://mpv.tickets.com/api/pvodc/v1/events/" + GetType + "/availability/?pid=" + pid + "&agency=" + agency + "&orgId=" + orgid + "&supportsVoucherRedemption=true";
@@ -506,7 +492,7 @@ namespace MLB_API.Scraper
             }
         }
 
-        public  void Cookiesfile(string message)
+        public void Cookiesfile(string message)
         {
             try
             {
@@ -523,14 +509,12 @@ namespace MLB_API.Scraper
             }
         }
 
-        public  void CreateDirectory(string path)
+        public void CreateDirectory(string path)
         {
             try
             {
                 if (!Directory.Exists(path))
-                {
                     Directory.CreateDirectory(path);
-                }
             }
             catch (Exception ex)
             {
@@ -539,7 +523,7 @@ namespace MLB_API.Scraper
             }
         }
 
-        public  void CreateNotepad(string path)
+        public void CreateNotepad(string path)
         {
             try
             {
@@ -565,6 +549,7 @@ namespace MLB_API.Scraper
         {
             try
             {
+                Isuseproxy = true;
                 cd.Close();
                 cd.Dispose();
                 cd.Quit();
@@ -611,7 +596,7 @@ namespace MLB_API.Scraper
         }
         public static void Get_HttpWebRequests()
         {
-           
+
 
             string ResponseText = string.Empty;
             HttpWebRequest _HttpRequest = (HttpWebRequest)WebRequest.Create("https://mpv.tickets.com/schedule/?agency=MLB_MPV&orgid=28");
