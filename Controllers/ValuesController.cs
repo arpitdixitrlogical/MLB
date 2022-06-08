@@ -44,7 +44,10 @@ namespace MLB_API.Controllers
                         {
                             //MS.writeLog("Get url");
                             string outpusstatus = MS.Input(model.EventURL, model.SeatmapId, model.Type, model.Cookies);
-                            return Json(new { Status = true, Message = outpusstatus });
+                            if (outpusstatus.StartsWith("<?xml"))
+                                return Json(new { Status = true, Message = outpusstatus });
+                            else
+                            return Json(new { Status = false, Message = outpusstatus });
                         }
                         else
                             return Json(new { Status = false, Message = "Incorrect event url check again.." });
