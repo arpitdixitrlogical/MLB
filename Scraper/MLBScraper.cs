@@ -101,12 +101,14 @@ namespace MLB_API.Scraper
                         if (cd != null)
                         {
                             PageSource = Navigation(cd, "id=\"venuemap-container\"", EventURL, GetType, SeatmapId, CookiesRequired);
-                            if (PageSource.Contains("OpenQA.Selenium.WebDriverException:"))
+                            if ((PageSource == "Rescrape") || (PageSource.Contains("We found the wrong page")) || (PageSource.Contains("OpenQA.Selenium.WebDriverException")))
                             {
                                 Isuseproxy = true;
                                 goto rty1;
                             }
-                            CloseBrowser(cd);
+                            else
+                                CloseBrowser(cd);
+                            //CloseBrowser(cd);
                         }
                         else
                             return "Seleniume Not working check it ?";
@@ -155,6 +157,11 @@ namespace MLB_API.Scraper
             catch (Exception ex)
             {
                 return ex.ToString();
+            }
+            if (PageSource.ToLower().Contains("rescrape"))
+            {
+                CloseBrowser(cd);
+                goto rty1;
             }
             return PageSource;
         }
