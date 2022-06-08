@@ -37,6 +37,7 @@ namespace MLB_API.Scraper
         public static int iprand = 0;
         public static int errorpage = 0;
         public static bool Isuseproxy = false;
+        public static int retrybrowser = 0;
         static void Main(string[] args)
         {
             try
@@ -61,9 +62,16 @@ namespace MLB_API.Scraper
             Taskkill("chromedriver");
             Taskkill("chrome");
             File.WriteAllText(Error_list, EventURL);
+             useragentnum = 0;
+             iprand = 0;
+             errorpage = 0;
+             Isuseproxy = false;
+             retrybrowser = 0;
 
         rty1:
             string PageSource = "";
+
+
             try
             {
                 //IWebDriver cd = null;
@@ -74,7 +82,7 @@ namespace MLB_API.Scraper
                 {
                     PageSource = Getdata(File.ReadAllText(Cookiestext), EventURL, GetType, SeatmapId, CookiesRequired, 2);
 
-                    if ((PageSource.Contains("Cookies is not Working")) || (PageSource.Contains("We found the wrong page. Please try again")))
+                    if ((PageSource.Contains("Cookies is not Working")) || (PageSource.Contains("We found the wrong page")))
                     {
 
                         try
@@ -93,12 +101,15 @@ namespace MLB_API.Scraper
                         if (cd != null)
                         {
                             PageSource = Navigation(cd, "id=\"venuemap-container\"", EventURL, GetType, SeatmapId, CookiesRequired);
+                            if (PageSource.Contains("OpenQA.Selenium.WebDriverException:"))
+                            {
+                                Isuseproxy = true;
+                                goto rty1;
+                            }
                             CloseBrowser(cd);
                         }
                         else
-                        {
                             return "Seleniume Not working check it ?";
-                        }
                     }
                 }
                 else
@@ -124,7 +135,7 @@ namespace MLB_API.Scraper
                     if (PageSource != "")
                     {
                         PageSource = Navigation(cd, "id=\"venuemap-container\"", EventURL, GetType, SeatmapId, CookiesRequired);
-                        if ((PageSource == "Rescrape") || (PageSource.Contains("We found the wrong page. Please try again")))
+                        if ((PageSource == "Rescrape") || (PageSource.Contains("We found the wrong page")) || (PageSource.Contains("OpenQA.Selenium.WebDriverException")))
                         {
                             Isuseproxy = true;
                             goto rty1;
@@ -132,7 +143,7 @@ namespace MLB_API.Scraper
                         else
                             CloseBrowser(cd);
                     }
-                    else if ((PageSource == "Rescrape") || (PageSource.Contains("We found the wrong page. Please try again")))
+                    else if ((PageSource == "Rescrape") || (PageSource.Contains("We found the wrong page")))
                     {
                         CloseBrowser(cd);
                         goto rty1;
@@ -140,12 +151,6 @@ namespace MLB_API.Scraper
                     else
                         return "Seleniume Not working check it ?";
                 }
-
-                //if ((PageSource.Contains("OpenQA.Selenium.WebDriverException")))
-                //goto rty1;
-
-                //if (((PageSource.Contains("found the wrong page")) || (PageSource.Contains("Rescrape")) || (PageSource.Contains("OpenQA.Selenium.WebDriverException"))) && (!PageSource.Contains("<?xml")) && (!PageSource.Contains("<html")))
-                //     goto rty1;
             }
             catch (Exception ex)
             {
@@ -267,7 +272,7 @@ namespace MLB_API.Scraper
                     pagesource = "Rescrape";
                 }
                 else
-                    return "Found Wrong page..";
+                    return "We found the wrong page.";
             }
             catch (Exception ex)
             {
@@ -340,9 +345,7 @@ namespace MLB_API.Scraper
 
                 Thread.Sleep(time);
                 if (pagesource.StartsWith("<?xml"))
-                {
                     File.WriteAllText(Cookiestext, Cookie);
-                }
                 else
                 {
                     if (checkreq < rtypage)
@@ -353,9 +356,12 @@ namespace MLB_API.Scraper
                     else
                     {
                         File.WriteAllText(Cookiestext, "");
-                        return "We found the wrong page. Please try again";
+                        return "We found the wrong page";
                     }
                 }
+                if ((retrybrowser > 4) && (!pagesource.StartsWith("<?xml")))
+                    return "IP is blocked try again some time?.";
+
             }
             catch (Exception ex)
             {
@@ -368,7 +374,7 @@ namespace MLB_API.Scraper
                 if (checkcookies == true)
                     pagesource = "Cookies is not Working";
                 else
-                    return "We found the wrong page. Please try again.";
+                    return "We found the wrong page.";
 
                 goto rty;
 
@@ -549,7 +555,9 @@ namespace MLB_API.Scraper
         {
             try
             {
+                
                 Isuseproxy = true;
+                retrybrowser++;
                 cd.Close();
                 cd.Dispose();
                 cd.Quit();
