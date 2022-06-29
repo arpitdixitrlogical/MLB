@@ -174,13 +174,18 @@ namespace MLB_API.Scraper
 
             try
             {
-                string exe_path = Input_path + @"edmgabkkegnklhhghcijffilbmfmmnji\6.6.1_0";
+                string exe_path = Input_path + @"mjnbclmflcpookeapghfhapeffmpodij\1.6.6_0";
+                //string exe_path = Input_path + @"edmgabkkegnklhhghcijffilbmfmmnji\6.6.1_0";
+
+                //Isuseproxy = true;
 
                 var options = new ChromeOptions();
                 //options.AddArgument("--disable-extensions");
                 options.AddArgument("--profile-directory=Default");
                 // options.AddArgument("--incognito");
+                if (Isuseproxy == true)
                 options.AddArgument("load-extension=" + exe_path);
+
                 options.AddArgument("--disable-plugins-discovery");
                 options.AddArgument("--start-maximized");
                 options.AddExcludedArguments(new List<string>() { "enable-automation" });
@@ -190,9 +195,11 @@ namespace MLB_API.Scraper
                 options.AddArgument("user-agent=" + eightserlist[useragentnum]);
                 cd = new ChromeDriver(Input_path, options);
                 //cd.Manage().Timeouts().PageLoad.Add(System.TimeSpan.FromSeconds(40));
+                Thread.Sleep(3000);
+                //if (Isuseproxy == true)
+                //    ProxyChnage(cd);
 
-                if (Isuseproxy == true)
-                    ProxyChnage(cd);
+                CloseTab(cd);
             }
             catch (Exception ex)
             {
@@ -210,7 +217,7 @@ namespace MLB_API.Scraper
             rty:
                 int nextcountry = random.Next(0, GEOCountrylist.Count() - 1);
                 int a = 1;
-                cd.Navigate().GoToUrl("chrome-extension://edmgabkkegnklhhghcijffilbmfmmnji/popup/popup.html");
+                cd.Navigate().GoToUrl("chrome-extension://pbeiepmppflpoggienbcdmnccnbabpnk/popup.html");
                 Thread.Sleep(2000);
                 if (cd.PageSource.Contains("name=\"email\""))
                 {
@@ -344,7 +351,7 @@ namespace MLB_API.Scraper
                     return Cookie;
                 }
 
-
+                checkreq = 1;
                 if (checkreq == 0 || checkreq == 2 || checkreq == 4)
                     pagesource = Webclient(Cookie, EventURL, GetType, SeatmapId, checkcookies, nextuseragent, url, checkreq);
                 else if (checkreq == 1 || checkreq == 3 || checkreq == 5)
@@ -431,6 +438,9 @@ namespace MLB_API.Scraper
                 WinHttp_Request.SetRequestHeader("referer", EventURL);
                 WinHttp_Request.Send();
                 pagesource = WinHttp_Request.ResponseText;
+                string data2 = WinHttp_Request.GetAllResponseHeaders();
+                string responcecookies = "_abck=" + Regex.Match(data2, "_abck=(.*?);").Groups[1].Value;
+
             }
             catch (Exception ex)
             {
@@ -478,6 +488,7 @@ namespace MLB_API.Scraper
                     }
 
                     pagesource = wc.DownloadString(url);
+                  
 
                 }
             }
@@ -522,6 +533,28 @@ namespace MLB_API.Scraper
             }
         }
 
+        public static void CloseTab(IWebDriver cd)
+        {
+            try
+            {
+                
+                    var tabs = cd.WindowHandles;
+                    cd.SwitchTo().Window(cd.WindowHandles[0]);
+                    //cd.SwitchTo().Window(tabs[0]);
+                    if (tabs.Count > 1)
+                    {
+
+                        cd.SwitchTo().Window(cd.WindowHandles[1]).Close();
+                        cd.SwitchTo().Window(cd.WindowHandles[0]);
+                        Thread.Sleep(1000);
+                    }
+                    
+                
+            }
+            catch (Exception ex)
+            {
+            }
+        }
         public void CreateDirectory(string path)
         {
             try

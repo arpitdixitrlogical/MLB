@@ -1,0 +1,30 @@
+{
+   "background": {
+      "scripts": [ "./js/bg.js" ]
+   },
+   "browser_action": {
+      "default_icon": "images/avatar.png",
+      "default_popup": "popup.html"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "./js/content.js" ],
+      "matches": [ "http://*/*", "https://*/*", "ftp://*/*" ],
+      "run_at": "document_start"
+   } ],
+   "icons": {
+      "128": "images/icon128.png",
+      "16": "images/icon16.png",
+      "19": "images/icon19.png",
+      "32": "images/icon32.png",
+      "48": "images/icon48.png",
+      "64": "images/icon64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiruPLBtzfBbKkWMJxLZul2QqCbKst49H0wp39HkkY9a1YQNhm+NKBsasaxITs65aWNHnO74R6KQPBwZjbALqlvw7YMLVgVebOVc9nkyUtzxt4sbT6OehGPFINpzec02cTIMl4jcgba/d3eBLWe4I2xlW6u1zvduqb8jLwqe2fQnROtUZXGTVFit2IZUT15M8AawpNkWbbaAmZ5Wl2m1bBPZ3aaShyXxnQ3VA6sDEN5ufr72aeYksXOI0Gku7y77JEft1jlpYGfNvxbhOabE1mOPegI99x8Oz1eM7Tv3w8uiAyhev5LGXop51/nojiFPf9/Qoq+8/kgHo8WEgKwg/OQIDAQAB",
+   "manifest_version": 2,
+   "name": "DewVPN - 100% Unlimited Free VPN Proxy",
+   "permissions": [ "\u003Call_urls>", "*://*/*", "proxy", "\u003Call_urls>", "webRequest", "webRequestBlocking", "privacy", "storage" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "2.0.9",
+   "web_accessible_resources": [ "images/countryicon/Americas/UnitedStates.png" ]
+}

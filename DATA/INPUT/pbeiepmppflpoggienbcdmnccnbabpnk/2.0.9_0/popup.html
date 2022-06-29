@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>VPN</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link href="css/bootstrap-paper.css" rel="stylesheet">
+	<link href="css/bootstrap-switch.css" rel="stylesheet">
+	<link href="css/popup.css" rel="stylesheet">
+	<link href="css/steup.css" rel="stylesheet">
+	<script type="text/javascript" src="js/angular.js"></script>
+</head>
+<body>
+	<div ng-app="myApp" ng-controller="myCtrl">
+		<div class="page1" ng-show="showPage1" style="min-width:380px;">
+			<nav class="navbar navbar-inverse mainbg" role="navigation">
+				<div class="navbar-header">
+					<span class="title">
+						<img src="images/icon.png">&nbsp; <span>DewVPN</span>
+					</span>
+					<a class="settings" id="btn_settings_off" ng-click="toPage2()">
+						<span class="glyphicon glyphicon-cog"></span>
+					</a>
+				</div>
+			</nav>
+			<div class="container" style="position:relative;">
+				<div style="width:100%;height:100%;display:block;position:absolute;left:0;top:0;z-index:100" ng-show="disabledCon"></div>
+				<div class="row">
+					<div class="col-xs-4">
+					</div>
+					<div class="col-xs-4">
+						<span class="onOff btn-block off" ng-show="vpnOff">VPN is Off</span>
+						<span class="onOff btn-block on" ng-show="!vpnOff">VPN is On</span>
+					</div>
+					<div class="col-xs-4">
+					</div>
+				</div>
+				<div class="row">
+					<div class="container">
+						<div class="current">
+							<img src="images/currentLocation.png">
+							&nbsp;Current location:
+							<img blocksrc imgid="{{nowProxy.imageid}}" class="flag" width="16">
+							<span>{{nowProxy.caption}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="container">
+						<div class="server-list-title text-center">
+							<img src="images/serverList.png">&nbsp;
+							Server List
+						</div>
+						<ul class="server-list scroll" ng-show="listShow">
+							<li ng-repeat="proxy in proxyList" ng-click="setProxy(proxy)" ng-dblclick="setProxydbl(proxy)" ng-class="proxy.className">
+								<img blocksrc imgid="{{proxy.imageid}}" class="flag" width="16">
+								<span class="name">{{proxy.caption}}</span>
+							</li>
+						</ul>
+						<div class="loading-server-list" ng-show="!listShow">
+							<img src="images/loading 64-64.png" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-2">
+					</div>
+					<div class="col-xs-8 padding8">
+						<button class="btn btn-lg btn-danger btn-block " ng-show="!vpnOff" ng-click="disconnect()">
+							Disconnect
+						</button>
+						<button class="btn btn-lg btn-success btn-block" ng-show="vpnOff" ng-click="connect()">
+							Connect
+						</button>
+					</div>
+					<div class="col-xs-2">
+					</div>
+				</div>
+			</div>
+			<footer>
+				<div class="row" ng-show="downloadNavigator">
+
+					<div class="row">
+						<div class="col-xs-1">
+						</div>
+						<div class="col-xs-10 padding8 download-div">
+							<span>
+								This extension requires the DewVPN client to be running. Please click the button below to download.
+							</span>
+							<button id="downloadExecu" ng-click="download()" class="btn btn-lg btn-success btn-block mainbg">
+								Download
+							</button>
+						</div>
+						<div class="col-xs-1">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-4">
+						</div>
+						<div class="col-xs-4 text-center">
+							<br>
+						</div>
+						<div class="col-xs-4">
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<div class="page1d" ng-show="showPage1d" style="min-width:270px;">
+			<div ng-view="" class="ng-scope" style="">
+				<div class="container-tx ng-scope" style=" ">
+					<div class="logo-div">
+						<h3 class="logo text-center">
+							&nbsp;&nbsp;DewVPN
+						</h3>
+					</div>
+					<div class="well single-block text-center yellow-border">
+						<br>
+						<div class="loading-server-list" ng-show="!listShow">
+							<img src="images/loading 64-64.png" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="page11" ng-show="showPage11" style="min-width:270px;">
+			<div ng-view="" class="ng-scope" style="">
+				<div class="container-tx ng-scope" style=" ">
+					<div class="logo-div">
+						<h3 class="logo text-center">
+							&nbsp;&nbsp;DewVPN
+						</h3>
+					</div>
+					<div class="well single-block text-center yellow-border">
+						<br>
+						<p class="text-left yellow-colr ng-binding" style="margin-bottom:15px;">
+							DewVPN Chrome Application is required to start DewVPN Plugin.
+						</p>
+						<p class="text-left yellow-colr ng-binding">
+							Click on the button bellow to safely install from our website.
+						</p>
+						<br>
+						<a ng-click="clicked_install($event)" target="_blank" class="btn-getpremium btn-a ng-binding" href="http://107.151.128.213:9780/pluginweb/download.asp">Install DewVPN App</a>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="page2" ng-show="showPage2" style="min-width:380px;">
+			<nav class="navbar navbar-inverse mainbg" role="navigation">
+				<div class="navbar-header">
+					<a>
+						<span class="backlink glyphicon glyphicon-arrow-left" ng-click="toPage1()"></span>
+					</a>
+					<span class="created-noise">Created new canvas noise!</span>
+				</div>
+			</nav>
+			<div class="container">
+				<div class="row">
+					<div class="container">
+						<span>
+							Privacy options
+						</span>
+						<ul class="setting-list">
+							<li>
+								<img src="images/signal.png">
+								<span>
+									&nbsp;&nbsp;
+									Block WebRTC IP Detection
+								</span>
+								<input type="checkbox" ng-checked="webRTCState" ng-click="changeWebRTC()" style="float:right">
+							</li>
+							<li>
+								<img src="images/fingerprint.png">
+								<span>
+									&nbsp;&nbsp;
+									Canvas Fingerprint spoofing
+								</span>
+								<input type="checkbox" ng-checked="gnerateNewFingerDiv" ng-click="changeCanvasBlock()" style="float:right">
+							</li>
+							<li class="text-center" ng-show="gnerateNewFingerDiv">
+								Current canvas noise hash:
+								<b>#{{canvasHash}}</b>
+							</li>
+							<li ng-show="gnerateNewFingerDiv">
+
+								<div class="row">
+									<div class="col-xs-1">
+									</div>
+									<div class="col-xs-10 ">
+										<button class="btn btn-success btn-block mainbg" ng-click="newNoise()">
+											Generate new cavnas noise
+										</button>
+									</div>
+									<div class="col-xs-1">
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<footer>
+				<br>
+			</footer>
+		</div>
+		<div class="page3" ng-show="connecting">
+			<div class="wrapper">
+
+				<div class="proxySpinner">
+					<img src="images/icon.png" width="50">
+					<img src="images/spinner.svg" width="100" height="100">
+				</div>
+
+				<div class="proxyTitle">Please wait</div>
+
+				<div class="proxyConnecting">Connecting...</div>
+
+				<div class="progress-bar">
+					<div class="progress-bar-progress"></div>
+				</div>
+
+				<div class="proxyBtn">
+					<a href="#" class="btn mainbg" ng-click="cancelConnect()">Cancel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/js.js"></script>
+</body>
+</html>

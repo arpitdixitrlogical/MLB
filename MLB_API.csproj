@@ -156,11 +156,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\MLBmodel.cs" />
+    <Compile Include="Models\TicketmasterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scraper\MLBScraper.cs" />
     <Compile Include="Scraper\MyWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Scraper\Ticketmaster.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

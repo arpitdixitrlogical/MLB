@@ -25,7 +25,7 @@ namespace MLB_API.Controllers
         }
 
         [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/GetTicket")]
+        [System.Web.Http.Route("api/GetMLBTicket")]
         public IHttpActionResult Post(MLBmodel model)
         {
             try
@@ -64,6 +64,42 @@ namespace MLB_API.Controllers
             }
 
             return null;
+        }
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("api/GetTMToken")]
+        public IHttpActionResult Post([FromBody] dynamic json)
+        {
+            try
+            {
+                int datacount = json["Urls"].Count;
+                Ticketmaster TM = new Ticketmaster();
+                var re = Request;
+                var headers = Request.Headers;
+
+                if (headers.Contains("Token"))
+                {
+                    string token = headers.GetValues("Token").First();
+                    if (!string.IsNullOrEmpty(token) && token == "ea66df3b796d4967945ef67f35fef4f7")
+                    {
+                        if (datacount != 0)
+                        {
+                            var outpusstatus = TM.Input(json);
+                            return Json(new { Status = true, Message = outpusstatus });
+                        }
+                        else
+                            return Json(new { Status = false, Message = "Incorrect event url check again.." });
+                    }
+                    else
+                        return Json(new { Status = false, Message = "Invalid Token!" });
+                }
+                else
+                    return Json(new { Status = false, Message = "Invalid Token!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Status = false, Message = "Invalid Token!" });
+            }
         }
 
         // PUT api/values/5

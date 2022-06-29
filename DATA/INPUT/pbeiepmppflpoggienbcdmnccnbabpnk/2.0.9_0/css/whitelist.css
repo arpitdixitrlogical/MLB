@@ -1,0 +1,70 @@
+
+.navbar-brand {
+    background-position-x: left;
+    margin-left: 80px;
+    width: calc(100% - 80px);
+}
+
+.back-link {
+    padding: 20px;
+    font-size: 1.25em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: white!important;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: none!important;
+}
+
+.jumbotron {
+    border: 1px solid #ddd;
+}
+
+.list-group {
+    margin-bottom: 0;
+}
+
+#add {
+    font-size: 1em;
+    text-align: center;
+    background-color: #fff;
+    background-size: 16px;
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    border: 1px solid #ddd;
+}
+
+.listelement {
+    background: #e51c23 none repeat scroll 0 0;
+    color: #fff;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border: 0;
+}
+
+.form-group label{
+    font-weight: bold;
+}
+
+hr {
+    margin-top: 5px !important;
+    margin-bottom: 15px !important;
+}
+
+#error{
+    color: #e51c23;
+}
+
+input.form-control:focus, input[type=text]:focus, [type=text].form-control:focus{
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+
+.scroll {
+    height: 125px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
