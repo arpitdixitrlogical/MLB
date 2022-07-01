@@ -24,6 +24,7 @@ namespace MLB_API.Controllers
             return "value";
         }
 
+       //MLB API
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("api/GetMLBTicket")]
         public IHttpActionResult Post(MLBmodel model)
@@ -66,6 +67,7 @@ namespace MLB_API.Controllers
             return null;
         }
 
+        //Ticketmaster API
         [System.Web.Http.HttpPost]
         [System.Web.Http.Route("api/GetTMToken")]
         public IHttpActionResult Post([FromBody] dynamic json)

@@ -10,5 +10,6 @@ namespace MLB_API.Models
         public string EventURL { get; set; }
         public string Status { get; set; }
         public string Message { get; set; }
+        public string Proxy { get; set; }
     }
 }

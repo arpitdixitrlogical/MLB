@@ -26,7 +26,7 @@ namespace MLB_API.Scraper
         public static string[] UserAgentList = File.ReadAllLines(Input_path + "UserAgent.txt");
         public static string[] Refererlist = File.ReadAllLines(Input_path + "referer.txt");
         public static string[] GEOCountrylist = File.ReadAllLines(Input_path + "GEOCountry.txt");
-        public static bool Isuseproxy = false;
+        public static string isuseproxy = "local";
         public static int useragentnum = 0;
         public static int iprand = 0;
 
@@ -42,7 +42,7 @@ namespace MLB_API.Scraper
                 CreateDirectory(Input_path);
                 CreateNotepad(Cookiestext);
                 CreateNotepad(Error_list);
-                Isuseproxy = false;
+                isuseproxy = "local";
 
                 int datacount = jsondata["Urls"].Count;
 
@@ -54,22 +54,7 @@ namespace MLB_API.Scraper
 
                     //open Seleniume..
                     OpenSeleniume("", EventURL);
-
-                    //if (cd == null)
-                    //{
-
-                    //    //PageSource = Navigation(cd, "id=\"venuemap-container\"", EventURL, GetType, SeatmapId);
-
-                    //}
-                    //else
-                    //{
-                    //    Outputlist.Add(new TicketmasterModel { EventURL = EventURL, Status = "true", Message = "Seleniume Not working check it" });
-                    //    return Outputlist;
-                    //}
-
                 }
-
-                //Environment.Exit(0);
             }
             catch (Exception ex)
             {
@@ -153,30 +138,35 @@ namespace MLB_API.Scraper
 
                 if (page == null)
                 {
-                    string exe_path = Input_path + @"edmgabkkegnklhhghcijffilbmfmmnji\6.6.1_0";
+                    string GEOexe_path = Input_path + @"edmgabkkegnklhhghcijffilbmfmmnji\6.6.1_0";
 
-                    //var driverService = ChromeDriverService.CreateDefaultService();
-                    //driverService.HideCommandPromptWindow = true;
+                    string Rackexe_path1 = Input_path + @"dpplabbmogkhghncfbfdeeokoefdjegm\1.10.7_0";
+
+                    string Rackexe_path2 = Input_path + @"enhldmjbphoeibbpdhmjkchohnidgnah\0.9.1_0";
 
                     var options = new ChromeOptions();
                     options.AddExcludedArguments(new List<string>() { "enable-automation" });
-                    //options.AddAdditionalCapability("useAutomationExtension", false);
                     options.AddArgument("--profile-directory=Default");
-                    //options.AddArgument("--incognito");
-                    if (Isuseproxy == true)
-                        options.AddArgument("load-extension=" + exe_path);
+                    options.AddArgument(@"load-extension=" + Rackexe_path1 + "," + Rackexe_path2 + "");
+
+                    if (isuseproxy == "geosurf")
+                        options.AddArgument("load-extension=" + GEOexe_path);
+                    else if (isuseproxy == "proxyrack")
+                        options.AddArgument(@"load-extension=" + Rackexe_path1 + "," + Rackexe_path2 + "");
 
                     options.AddArgument("--disable-blink-features");
                     options.AddArgument("--disable-blink-features=AutomationControlled");
-                    //options.Proxy = new Proxy { HttpProxy = "173.208.152.162:19004", SslProxy = "173.208.152.162:19004", Kind = ProxyKind.Manual };
                     options.AddArgument("--user-agent=" + UserAgentList[rnum] + "");
                     options.AddArguments("start-maximized");
                     cd = new ChromeDriver(Input_path, options);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
 
-                    if (Isuseproxy == true)
+                    if (isuseproxy == "geosurf")
                         ProxyChnage(cd);
+                    else if (isuseproxy == "proxyrack")
+                        ChnageProxyExtention(cd);
 
+                    Closetab(cd,false);
                     Navigation(cd, "", EventURL);
                 }
                 else
@@ -244,7 +234,7 @@ namespace MLB_API.Scraper
                 string Cookie = ""; string reese84 = ""; string eps_sid = "";
                 //cd.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
                 cd.Navigate().GoToUrl(EventURL);
-                Thread.Sleep(2000);
+                Thread.Sleep(5000);
                 string page = cd.PageSource;
 
 
@@ -260,13 +250,17 @@ namespace MLB_API.Scraper
 
                 if (Cookie != "")
                 {
-                    Outputlist.Add(new TicketmasterModel { EventURL = EventURL, Status = "true", Message = Cookie });
+                    Outputlist.Add(new TicketmasterModel { EventURL = EventURL, Status = "true", Message = Cookie, Proxy =isuseproxy});
                     CloseBrowser(cd);
-                    Isuseproxy = false;
+                    isuseproxy = "local";
                 }
                 else
                 {
-                    Isuseproxy = true;
+                    if (isuseproxy == "local")
+                        isuseproxy = "geosurf";
+                    else if (isuseproxy == "geosurf")
+                        isuseproxy = "proxyrack";
+                       
                     CloseBrowser(cd);
                     OpenSeleniume("", EventURL);
                 }
@@ -283,10 +277,6 @@ namespace MLB_API.Scraper
         {
             try
             {
-                //IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-                //js.ExecuteScript("window.open('" + test_url_2 + "', '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,width=800,height=800')");
-
-
                 cd.Close();
                 cd.Dispose();
                 cd.Quit();
@@ -296,7 +286,6 @@ namespace MLB_API.Scraper
             catch (Exception ex)
             {
                 CloseTab();
-                //Process.Start(Input_path+ "chromekill.bat");
                 cd = null;
             }
         }
@@ -331,6 +320,110 @@ namespace MLB_API.Scraper
                 }
             }
         }
+
+
+        public static void ChnageProxyExtention(IWebDriver cd)
+        {
+            try
+            {
+                cd.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(15);
+
+                cd.Navigate().GoToUrl("chrome-extension://dpplabbmogkhghncfbfdeeokoefdjegm/options.html"); Thread.Sleep(1000);
+                if (cd.PageSource.Contains("New Profile</span>"))
+                {
+                    cd.FindElement(By.Id("profileName")).Clear();
+                    cd.FindElement(By.Id("profileName")).SendKeys("Test");
+                    cd.FindElement(By.Id("httpProxyHost")).Clear();
+                    cd.FindElement(By.Id("httpProxyHost")).SendKeys("premium.residential.proxyrack.net");
+                    cd.FindElement(By.Id("httpProxyPort")).Clear();
+                    cd.FindElement(By.Id("httpProxyPort")).SendKeys("9000");
+                    cd.FindElement(By.Id("useSameProxy")).Click();
+                    cd.FindElement(By.Id("profileName")).Click();
+                    cd.FindElement(By.Id("saveOptions")).Click();
+
+                }
+                else
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+
+                cd.Navigate().GoToUrl("chrome-extension://dpplabbmogkhghncfbfdeeokoefdjegm/popup.html");
+                Thread.Sleep(1000);
+
+                if (cd.PageSource.Contains("Test"))
+                {
+                    Closetab(cd, true);
+
+                    cd.FindElement(By.Id("Test")).Click(); Thread.Sleep(100);
+                    cd.SwitchTo().Window(cd.WindowHandles.Last());
+
+                rty:
+                    try
+                    {
+                        cd.Navigate().GoToUrl("chrome-extension://enhldmjbphoeibbpdhmjkchohnidgnah/options.html");
+                        Thread.Sleep(1100);
+                    }
+                    catch (Exception ex)
+                    { Thread.Sleep(1000); goto rty; }
+
+                    if (cd.PageSource.Contains("<th class=\"username"))
+                    {
+                        if (!cd.PageSource.Contains("https://www.ticketmaster"))
+                        {
+                            cd.FindElement(By.Id("url")).Clear();
+                            cd.FindElement(By.Id("url")).SendKeys("https://www.ticketmaster");
+                            cd.FindElement(By.Id("username")).Clear();
+                            cd.FindElement(By.Id("username")).SendKeys("jockey");
+                            cd.FindElement(By.Id("password")).Clear();
+                            cd.FindElement(By.Id("password")).SendKeys("116637-6f338e-90e3f8-a8afda-5f4130");
+                            cd.FindElement(By.Id("priority")).Clear();
+                            cd.FindElement(By.Id("priority")).SendKeys("1");
+                            cd.FindElement(By.XPath(".//button[@class='credential-form-submit']")).Click(); Thread.Sleep(800);
+                        }
+                    }
+                    Closetab(cd, false);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        public static void Closetab(IWebDriver cd, bool closetabs)
+        {
+            try
+            {
+                var tabs = cd.WindowHandles;
+                
+                if (closetabs == false)
+                {
+                    cd.SwitchTo().Window(tabs[0]);
+                    if (tabs.Count > 1)
+                    {
+
+                        cd.SwitchTo().Window(tabs[0]).Close();
+                        cd.SwitchTo().Window(tabs[1]);
+                        Thread.Sleep(1000);
+                    }
+                }
+                else
+                {
+                rty:
+                    tabs = cd.WindowHandles;
+                    if (tabs.Count > 1)
+                    {
+                    }
+                    else
+                    {
+                        ((IJavaScriptExecutor)cd).ExecuteScript("window.open();"); goto rty;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
 
         //public  void Insertdata( string token)
         //{
