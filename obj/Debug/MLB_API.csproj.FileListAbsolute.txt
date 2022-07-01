@@ -99,13 +99,3 @@ C:\ashish\obj\Debug\MLB_API.csproj.CoreCompileInputs.cache
 C:\ashish\obj\Debug\MLB_API.csproj.CopyComplete
 C:\ashish\obj\Debug\MLB_API.dll
 C:\ashish\obj\Debug\MLB_API.pdb
-D:\education\Ashish\Company\rlogical\Project\MLB\git\bin\MLB_API.dll.config
-D:\education\Ashish\Company\rlogical\Project\MLB\git\bin\MLB_API.dll
-D:\education\Ashish\Company\rlogical\Project\MLB\git\bin\MLB_API.pdb
-D:\education\Ashish\Company\rlogical\Project\MLB\git\bin\Microsoft.Web.Infrastructure.dll
-D:\education\Ashish\Company\rlogical\Project\MLB\git\bin\Newtonsoft.Json.dll
-D:\education\Ashish\Company\rlogical\Project\MLB\git\bin\Microsoft.Web.Infrastructure.xml
-D:\education\Ashish\Company\rlogical\Project\MLB\git\bin\WebDriver.xml
-D:\education\Ashish\Company\rlogical\Project\MLB\git\obj\Debug\MLB_API.csprojResolveAssemblyReference.cache
-D:\education\Ashish\Company\rlogical\Project\MLB\git\obj\Debug\MLB_API.dll
-D:\education\Ashish\Company\rlogical\Project\MLB\git\obj\Debug\MLB_API.pdb
