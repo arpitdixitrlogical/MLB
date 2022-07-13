@@ -19,24 +19,27 @@ namespace MLB_API.Scraper
         public static string Output_path = directory_name + "DATA\\OUTPUT\\" + System.DateTime.Now.ToString("MM-dd-yyyy");
         public static string Error_list = directory_name + "DATA\\OUTPUT\\" + System.DateTime.Now.ToString("MM-dd-yyyy") + "\\Error.txt";
         public static string Cookiestext = directory_name + "DATA\\OUTPUT\\" + System.DateTime.Now.ToString("MM-dd-yyyy") + "\\Cookies.txt";
-
+        public static string Errorcode = "";
         public static Random random = new Random();
         List<TicketmasterModel> Outputlist = new List<TicketmasterModel> { };
 
         public static string[] UserAgentList = File.ReadAllLines(Input_path + "UserAgent.txt");
         public static string[] Refererlist = File.ReadAllLines(Input_path + "referer.txt");
         public static string[] GEOCountrylist = File.ReadAllLines(Input_path + "GEOCountry.txt");
+
         public static string isuseproxy = "local";
         public static int useragentnum = 0;
         public static int iprand = 0;
+        public static string geosurf = "geosurf";
+        public static string proxyrack = "proxyrack";
 
 
         public List<TicketmasterModel> Input(dynamic jsondata)
         {
             try
             {
-                List<TicketmasterModel> Outputlist = new List<TicketmasterModel> { };
 
+                List<TicketmasterModel> Outputlist = new List<TicketmasterModel> { };
                 //IWebDriver cd = null;
                 CreateDirectory(Output_path);
                 CreateDirectory(Input_path);
@@ -52,14 +55,13 @@ namespace MLB_API.Scraper
                     if (jsondata["Urls"][i]["eventURL"] != null)
                         EventURL = jsondata["Urls"][i]["eventURL"];
 
-                    //open Seleniume..
                     OpenSeleniume("", EventURL);
                 }
             }
             catch (Exception ex)
             {
-                Outputlist.Add(new TicketmasterModel { Status = "false", Message = ex.ToString() });
-                return Outputlist;
+                Errorcode = "Status Code:404.5";
+                Outputlist.Add(new TicketmasterModel { Status = "false", Message = Errorcode });
             }
             return Outputlist;
         }
@@ -149,7 +151,7 @@ namespace MLB_API.Scraper
                     options.AddArgument("--profile-directory=Default");
                     options.AddArgument(@"load-extension=" + Rackexe_path1 + "," + Rackexe_path2 + "");
 
-                    if (isuseproxy == "geosurf")
+                    if (isuseproxy == geosurf)
                         options.AddArgument("load-extension=" + GEOexe_path);
                     else if (isuseproxy == "proxyrack")
                         options.AddArgument(@"load-extension=" + Rackexe_path1 + "," + Rackexe_path2 + "");
@@ -161,12 +163,12 @@ namespace MLB_API.Scraper
                     cd = new ChromeDriver(Input_path, options);
                     Thread.Sleep(1000);
 
-                    if (isuseproxy == "geosurf")
+                    if (isuseproxy == geosurf)
                         ProxyChnage(cd);
-                    else if (isuseproxy == "proxyrack")
+                    else if (isuseproxy == proxyrack)
                         ChnageProxyExtention(cd);
 
-                    Closetab(cd,false);
+                    Closetab(cd, false);
                     Navigation(cd, "", EventURL);
                 }
                 else
@@ -174,17 +176,15 @@ namespace MLB_API.Scraper
             }
             catch (Exception ex)
             {
-                Outputlist.Add(new TicketmasterModel { EventURL = EventURL, Status = "false", Message = "Chrome driver is not open" });
+                Errorcode = "Status Code:420";
+                Outputlist.Add(new TicketmasterModel { EventURL = EventURL, Status = "false", Message = Errorcode });
             }
         }
-
 
         public static void ProxyChnage(IWebDriver cd)
         {
             try
             {
-
-
             rty:
                 int nextcountry = random.Next(0, GEOCountrylist.Count() - 1);
                 int a = 1;
@@ -215,7 +215,6 @@ namespace MLB_API.Scraper
                             a++;
                     }
 
-                    //cd.FindElement(By.XPath(".//div[@class='button-footer button-turnon']")).Click();
                     Thread.Sleep(2000);
                     if (!cd.PageSource.Contains("<span>Turn on</span"))
                         goto rty;
@@ -231,7 +230,7 @@ namespace MLB_API.Scraper
         {
             try
             {
-                string Cookie = ""; string reese84 = ""; string eps_sid = "";
+                string Cookie = ""; string reese84 = "";
                 //cd.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
                 cd.Navigate().GoToUrl(EventURL);
                 Thread.Sleep(5000);
@@ -250,21 +249,20 @@ namespace MLB_API.Scraper
 
                 if (Cookie != "")
                 {
-                    Outputlist.Add(new TicketmasterModel { EventURL = EventURL, Status = "true", Message = Cookie, Proxy =isuseproxy});
+                    Outputlist.Add(new TicketmasterModel { EventURL = EventURL, Status = "true", Message = Cookie, Proxy = isuseproxy });
                     CloseBrowser(cd);
                     isuseproxy = "local";
                 }
                 else
                 {
                     if (isuseproxy == "local")
-                        isuseproxy = "geosurf";
-                    else if (isuseproxy == "geosurf")
-                        isuseproxy = "proxyrack";
-                       
+                        isuseproxy = geosurf;
+                    else if (isuseproxy == geosurf)
+                        isuseproxy = proxyrack;
+
                     CloseBrowser(cd);
                     OpenSeleniume("", EventURL);
                 }
-
             }
             catch (Exception ex)
             {
@@ -290,18 +288,6 @@ namespace MLB_API.Scraper
             }
         }
 
-        public static void WriteText(string Input_Path, string message)
-        {
-            try
-            {
-                File.AppendAllText(Input_Path, message + Environment.NewLine);
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
-
         public void CloseTab()
         {
             try
@@ -316,11 +302,11 @@ namespace MLB_API.Scraper
                 }
                 catch (Exception ex1)
                 {
-                    Outputlist.Add(new TicketmasterModel { Status = "false", Message = ex.ToString() });
+                    //Outputlist.Add(new TicketmasterModel { Status = "false", Message = Cookie }); ;
+                    //Outputlist.Add(new TicketmasterModel { Status = "false", Message = ex.ToString() });
                 }
             }
         }
-
 
         public static void ChnageProxyExtention(IWebDriver cd)
         {
@@ -423,7 +409,6 @@ namespace MLB_API.Scraper
             {
             }
         }
-
 
         //public  void Insertdata( string token)
         //{
